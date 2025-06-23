@@ -3,13 +3,17 @@
 #pragma once
 
 #include "CoreMinimal.h"
+
 #include "GameFramework/Character.h"
 #include "Logging/LogMacros.h"
+#include "Item.h"
+
 #include "InstintsCharacter.generated.h"
 
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+
 struct FInputActionValue;
 
 DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
@@ -75,6 +79,8 @@ protected:
 	void Sprint();
 	void Unsprint();
 
+
+
 public:
 
 	/** Handles move inputs from either controls or UI interfaces */
@@ -92,6 +98,16 @@ public:
 	/** Handles jump pressed inputs from either controls or UI interfaces */
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
+
+	
+	/** Called for adding an object of class item to player inventory **/
+	void AddItemToPlayer(AItem* Item);
+
+
+protected:
+
+	UPROPERTY(EditAnywhere, Category="Player")
+	TArray<AItem*> PlayerItems;
 
 public:
 

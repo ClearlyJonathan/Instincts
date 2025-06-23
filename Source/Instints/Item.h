@@ -7,6 +7,7 @@
 #include "Item.generated.h"
 
 class USphereComponent;
+class AInstintsCharacter;
 
 UCLASS()
 class INSTINTS_API AItem : public AActor
@@ -24,6 +25,9 @@ protected:
 
 	UFUNCTION(BlueprintCallable)
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+protected:
+	AInstintsCharacter* Character;
 
 public:	
 

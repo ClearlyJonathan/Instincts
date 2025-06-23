@@ -107,6 +107,13 @@ void AInstintsCharacter::Unsprint()
 	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
+void AInstintsCharacter::AddItemToPlayer(AItem* Item)
+{
+	if (!PlayerItems.Find(Item)) PlayerItems.Add(Item);
+
+	UE_LOG(LogTemp, Warning, TEXT("Item has already been registered"));
+}
+
 void AInstintsCharacter::DoMove(float Right, float Forward)
 {
 	if (GetController() != nullptr)
