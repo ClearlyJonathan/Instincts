@@ -66,6 +66,11 @@ void AInstintsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		// Looking
 		EnhancedInputComponent->BindAction(LookAction, ETriggerEvent::Triggered, this, &AInstintsCharacter::Look);
+
+		// Sprinting
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AInstintsCharacter::Sprint);
+		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AInstintsCharacter::Unsprint);
+
 	}
 	else
 	{
@@ -89,6 +94,17 @@ void AInstintsCharacter::Look(const FInputActionValue& Value)
 
 	// route the input
 	DoLook(LookAxisVector.X, LookAxisVector.Y);
+}
+
+void AInstintsCharacter::Sprint()
+{
+	// Set walk speed 
+	GetCharacterMovement()->MaxWalkSpeed = 500;
+}
+
+void AInstintsCharacter::Unsprint()
+{
+	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
 void AInstintsCharacter::DoMove(float Right, float Forward)
