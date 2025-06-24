@@ -13,6 +13,7 @@
 class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
+class UUserWidget;
 
 struct FInputActionValue;
 
@@ -49,6 +50,9 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* SprintAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
+	UInputAction* PickupAction;
+
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* LookAction;
@@ -56,6 +60,10 @@ protected:
 	/** Mouse Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MouseLookAction;
+
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="UI")
+	UUserWidget* PickupWidget;
 
 public:
 
@@ -79,6 +87,13 @@ protected:
 	void Sprint();
 	void Unsprint();
 
+	
+
+	/** Called for adding an object of class item to player inventory **/
+	void AddItemToPlayer(AItem* Item);
+
+	// Calls when overlap, resets when not overlapping
+	AItem* OverlappingItem;
 
 
 public:
@@ -99,10 +114,11 @@ public:
 	UFUNCTION(BlueprintCallable, Category="Input")
 	virtual void DoJumpEnd();
 
-	
-	/** Called for adding an object of class item to player inventory **/
-	void AddItemToPlayer(AItem* Item);
+	/** Called for pick input **/
+	void Pickup();
 
+	void DisplayPickupUi(bool State);
+	
 
 protected:
 
@@ -116,5 +132,11 @@ public:
 
 	/** Returns FollowCamera subobject **/
 	FORCEINLINE class UCameraComponent* GetFollowCamera() const { return FollowCamera; }
+
+	/** Set Overlapping item**/
+	FORCEINLINE void SetOverlappingItem(AItem* Item) { OverlappingItem = Item; }
+
+	/** Reset Overlapping item **/
+	FORCEINLINE void ResetOverlappingItem() { OverlappingItem = nullptr; }
 };
 

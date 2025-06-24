@@ -9,6 +9,8 @@
 #include "GameFramework/Controller.h"
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Blueprint/UserWidget.h"
+
 #include "InputActionValue.h"
 
 DEFINE_LOG_CATEGORY(LogTemplateCharacter);
@@ -71,6 +73,9 @@ void AInstintsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Triggered, this, &AInstintsCharacter::Sprint);
 		EnhancedInputComponent->BindAction(SprintAction, ETriggerEvent::Completed, this, &AInstintsCharacter::Unsprint);
 
+
+		// Actions
+		EnhancedInputComponent->BindAction(PickupAction, ETriggerEvent::Started, this, &AInstintsCharacter::Pickup);
 	}
 	else
 	{
@@ -107,12 +112,37 @@ void AInstintsCharacter::Unsprint()
 	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
+void AInstintsCharacter::Pickup()
+{
+	AddItemToPlayer(OverlappingItem);
+}
+
+void AInstintsCharacter::DisplayPickupUi(bool bState)
+{
+	if (bState)
+	{
+		PickupWidget->AddToViewport(0);
+	}
+	else
+	{
+		PickupWidget->RemoveFromParent();
+	}
+}
+
 void AInstintsCharacter::AddItemToPlayer(AItem* Item)
 {
-	if (!PlayerItems.Find(Item)) PlayerItems.Add(Item);
-
-	UE_LOG(LogTemp, Warning, TEXT("Item has already been registered"));
-}
+	
+	if (PlayerItems.Find(Item) == INDEX_NONE)
+	{
+		PlayerItems.Add(Item);
+		Item->DisableItem();
+		ResetOverlappingItem();
+	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Item has already been registered"));
+	}
+}	
 
 void AInstintsCharacter::DoMove(float Right, float Forward)
 {

@@ -18,14 +18,19 @@ class INSTINTS_API AItem : public AActor
 	USphereComponent* SphereComponent;
 public:	
 	AItem();
-
+	void EnableItem();
+	void DisableItem();
 
 protected:
 	virtual void BeginPlay() override;
 
 	UFUNCTION(BlueprintCallable)
 	void BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	UFUNCTION(BlueprintCallable)
+	void EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex);
 
+
+	
 protected:
 	AInstintsCharacter* Character;
 

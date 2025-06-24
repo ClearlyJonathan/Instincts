@@ -26,6 +26,7 @@ AItem::AItem()
 	SphereComponent->SetCollisionResponseToChannel(ECC_Pawn, ECR_Overlap);
 
 	SphereComponent->OnComponentBeginOverlap.AddDynamic(this, &AItem::BeginOverlap);
+	SphereComponent->OnComponentEndOverlap.AddDynamic(this, &AItem::EndOverlap);
 }
 
 // Called when the game starts or when spawned
@@ -37,13 +38,39 @@ void AItem::BeginPlay()
 
 void AItem::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
+	if (IsHidden()) return;
+
 	Character = Cast<AInstintsCharacter>(OtherActor);
-	
+	// Call Pickup method and pass the item to be picked up
 	if (Character != nullptr)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("Added item to player"));
-		Character->AddItemToPlayer(this);
+		Character->DisplayPickupUi(true);
+		Character->SetOverlappingItem(this);
 	}
+}
+
+void AItem::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex)
+{
+	Character = Cast<AInstintsCharacter>(OtherActor);
+	if (Character != nullptr)
+	{
+		Character->DisplayPickupUi(false);
+		Character->ResetOverlappingItem();
+	}
+
+}
+
+void AItem::EnableItem()
+{
+	SetActorHiddenInGame(false);
+	SetActorEnableCollision(true);
+}
+
+void AItem::DisableItem()
+{
+	SetActorHiddenInGame(true);
+	SetActorEnableCollision(false);
+	
 }
 
 // Called every frame
@@ -52,3 +79,5 @@ void AItem::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+
