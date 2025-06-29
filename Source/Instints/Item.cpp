@@ -46,6 +46,7 @@ void AItem::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* Other
 	{
 		Character->DisplayPickupUi(true);
 		Character->SetOverlappingItem(this);
+	
 	}
 }
 

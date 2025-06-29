@@ -10,6 +10,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
+#include "GunObject.h"
 
 #include "InputActionValue.h"
 
@@ -76,6 +77,7 @@ void AInstintsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 
 		// Actions
 		EnhancedInputComponent->BindAction(PickupAction, ETriggerEvent::Started, this, &AInstintsCharacter::Pickup);
+		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Started, this, &AInstintsCharacter::Equip);
 	}
 	else
 	{
@@ -112,8 +114,47 @@ void AInstintsCharacter::Unsprint()
 	GetCharacterMovement()->MaxWalkSpeed = 200;
 }
 
+void AInstintsCharacter::Equip()
+{
+	bHasWeaponEquipped = !bHasWeaponEquipped;
+	UE_LOG(LogTemp, Warning, TEXT("Weapon equipped: %s"), bHasWeaponEquipped ? TEXT("True") : TEXT("False"));
+
+	if (CurrentGun)
+	{
+		if (bHasWeaponEquipped)
+		{
+			CurrentGun->EnableItem();
+		}
+		else
+		{
+			CurrentGun->DisableItem();
+		}
+	}
+	else
+	{
+		// BUG: The gun sometimes causes the camera to clip to the player
+		for (AItem* Item : PlayerItems)
+		{
+			if (Item->ActorHasTag(FName("Shotgun")))
+			{
+				CurrentGun = Cast<AGunObject>(Item);
+				FAttachmentTransformRules TransformRules = FAttachmentTransformRules::SnapToTargetNotIncludingScale;
+				CurrentGun->AttachToComponent(GetMesh(), TransformRules, FName("WeaponSocket"));
+				
+				CurrentGun->EnableItem();
+				bHasWeaponEquipped = true;
+			}
+		}
+	}
+	
+
+
+}
+
 void AInstintsCharacter::Pickup()
 {
+
+	if (OverlappingItem == nullptr) return;
 	AddItemToPlayer(OverlappingItem);
 }
 

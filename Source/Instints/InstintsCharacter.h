@@ -14,6 +14,7 @@ class USpringArmComponent;
 class UCameraComponent;
 class UInputAction;
 class UUserWidget;
+class AGunObject;
 
 struct FInputActionValue;
 
@@ -53,6 +54,12 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* PickupAction;
 
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* EquipAction;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite, Category="Player")
+	bool bHasWeaponEquipped;
+
 	/** Look Input Action */
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* LookAction;
@@ -87,13 +94,16 @@ protected:
 	void Sprint();
 	void Unsprint();
 
-	
+	/** Called for weapons **/
+	void Equip();
 
 	/** Called for adding an object of class item to player inventory **/
 	void AddItemToPlayer(AItem* Item);
 
 	// Calls when overlap, resets when not overlapping
 	AItem* OverlappingItem;
+
+
 
 
 public:
@@ -124,6 +134,8 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category="Player")
 	TArray<AItem*> PlayerItems;
+
+	AGunObject* CurrentGun;
 
 public:
 
