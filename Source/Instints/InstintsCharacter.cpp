@@ -179,9 +179,8 @@ void AInstintsCharacter::AddItemToPlayer(AItem* Item)
 	if (PlayerItems.Find(Item) == INDEX_NONE)
 	{
 		PlayerItems.Add(Item);
+		Item->bHasBeenPickedUp = true;
 		Item->DisableItem();
-		
-		Item->SetActorEnableCollision(false);
 		ResetOverlappingItem();
 	}
 	else

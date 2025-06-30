@@ -38,7 +38,7 @@ void AItem::BeginPlay()
 
 void AItem::BeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
 {
-	if (IsHidden()) return;
+	if (IsHidden() or bHasBeenPickedUp) return;
 
 	Character = Cast<AInstintsCharacter>(OtherActor);
 	// Call Pickup method and pass the item to be picked up
@@ -59,6 +59,11 @@ void AItem::EndOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherAc
 		Character->ResetOverlappingItem();
 	}
 
+}
+
+void AItem::DisableCollision()
+{
+	SphereComponent->SetCollisionEnabled(ECollisionEnabled::NoCollision);
 }
 
 void AItem::EnableItem()
