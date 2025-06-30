@@ -15,6 +15,7 @@ class UCameraComponent;
 class UInputAction;
 class UUserWidget;
 class AGunObject;
+class UAnimMontage;
 
 struct FInputActionValue;
 
@@ -72,6 +73,11 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="UI")
 	UUserWidget* PickupWidget;
 
+
+	/** Animations **/
+	UPROPERTY(EditAnywhere, Category="Animation")
+	UAnimMontage* EquipAnimation;
+
 public:
 
 	/** Constructor */
@@ -103,7 +109,7 @@ protected:
 	// Calls when overlap, resets when not overlapping
 	AItem* OverlappingItem;
 
-
+	
 
 
 public:

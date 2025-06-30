@@ -123,6 +123,9 @@ void AInstintsCharacter::Equip()
 	{
 		if (bHasWeaponEquipped)
 		{
+		
+			// TODO: Return to normal animation after equipping
+			// GetMesh()->PlayAnimation(EquipAnimation, false);
 			CurrentGun->EnableItem();
 		}
 		else
@@ -177,6 +180,8 @@ void AInstintsCharacter::AddItemToPlayer(AItem* Item)
 	{
 		PlayerItems.Add(Item);
 		Item->DisableItem();
+		
+		Item->SetActorEnableCollision(false);
 		ResetOverlappingItem();
 	}
 	else
