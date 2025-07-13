@@ -11,6 +11,7 @@
 #include "EnhancedInputSubsystems.h"
 #include "Blueprint/UserWidget.h"
 #include "GunObject.h"
+#include "Bullet.h"
 
 #include "InputActionValue.h"
 
@@ -78,6 +79,7 @@ void AInstintsCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputC
 		// Actions
 		EnhancedInputComponent->BindAction(PickupAction, ETriggerEvent::Started, this, &AInstintsCharacter::Pickup);
 		EnhancedInputComponent->BindAction(EquipAction, ETriggerEvent::Started, this, &AInstintsCharacter::Equip);
+		EnhancedInputComponent->BindAction(FireAction, ETriggerEvent::Started, this, &AInstintsCharacter::Fire);
 	}
 	else
 	{
@@ -151,6 +153,25 @@ void AInstintsCharacter::Equip()
 	}
 	
 
+
+}
+
+void AInstintsCharacter::Fire()
+{
+	if (!CurrentGun) return;
+	// Get a bullet, Spawn the bullet into the direction the player is facing and if it hits an enemy, its a hit
+	// CurrentGun
+	FVector Location = CurrentGun->GetActorLocation();
+	FVector Scale = FVector(.5, .5, .5);
+	FTransform Transform = FTransform(FRotator(), Location, Scale);
+
+	FActorSpawnParameters SpawnParameters;
+	SpawnParameters.Owner = this;
+
+	ABullet* Bul = GetWorld()->SpawnActor<ABullet>(Bullet, Location, FRotator(), SpawnParameters);
+	
+
+	
 
 }
 

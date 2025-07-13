@@ -15,6 +15,7 @@ class UCameraComponent;
 class UInputAction;
 class UUserWidget;
 class AGunObject;
+class ABullet;
 class UAnimMontage;
 
 struct FInputActionValue;
@@ -69,14 +70,21 @@ protected:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="Input")
 	UInputAction* MouseLookAction;
 
+	/** Attack Input actions **/
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Input")
+	UInputAction* FireAction;
 
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category="UI")
 	UUserWidget* PickupWidget;
 
 
+	
+
+
 	/** Animations **/
 	UPROPERTY(EditAnywhere, Category="Animation")
 	UAnimMontage* EquipAnimation;
+
 
 public:
 
@@ -100,8 +108,9 @@ protected:
 	void Sprint();
 	void Unsprint();
 
-	/** Called for weapons **/
+	/** Called for weapons or attack actions **/
 	void Equip();
+	void Fire();
 
 	/** Called for adding an object of class item to player inventory **/
 	void AddItemToPlayer(AItem* Item);
@@ -142,6 +151,10 @@ protected:
 	TArray<AItem*> PlayerItems;
 
 	AGunObject* CurrentGun;
+	/** Player items **/
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Player")
+	TSubclassOf<ABullet> Bullet;
+
 
 public:
 
